@@ -1,42 +1,64 @@
 #include <stdio.h>
-
-
+#include <stdlib.h>
+/*
+ * ponteiro para a quantidade de elementos
+ */
+int *pQtdElementos;
+/**
+ * Ordena o array de acordo com o menor valor atual
+ */
+void realizarTroca(int *array, int posicaoAtual, int menorValor){
+    int troca = array[posicaoAtual];    
+    array[posicaoAtual] = array[menorValor];
+    array[menorValor] = troca;
+}
 
 void main() {
-
     int numeroDeElementos;
     int contador; 
-    int subContador; 
-    int posicao;
-    int troca;
-    
-    printf("Enter number of elements\n");
+    int subContador;
+    int menorValorAtual;
+    /*
+     * Le os dados digitados
+     */
+    printf("Informe a quantidade de elementos no array\n");
     scanf("%d", &numeroDeElementos);
-    printf("Enter %d integers\n", numeroDeElementos);
-    
-    int array[numeroDeElementos];
-
-    for (contador = 0; contador < numeroDeElementos; contador++){
+    pQtdElementos = (int *)&numeroDeElementos;
+    printf("Array com %d inteiros\n", *pQtdElementos);
+    /*
+     * Define o tamanho do array
+     */
+    int array[*pQtdElementos];
+    /*
+     * Le os valores do array
+     */
+    printf("Informe os valores:\n");
+    for (contador = 0; contador < *pQtdElementos; contador++){
         scanf("%d", &array[contador]);
     }
-
-    for (contador = 0; contador < (numeroDeElementos - 1); contador++) {
-        posicao = contador;
-
-        for (subContador = contador + 1; subContador < numeroDeElementos; subContador++) {
-            if (array[posicao] > array[subContador])
-                posicao = subContador;
+    /*
+     * Realiza a ordenacao
+     */
+    for (contador = 0; contador < (*pQtdElementos - 1); contador++){
+        /*
+         * Retorna o indice do menor valor
+         */
+        menorValorAtual = contador;
+        for (subContador = contador + 1; subContador < *pQtdElementos; subContador++) {
+            if (array[menorValorAtual] > array[subContador]){
+                menorValorAtual = subContador;
+            }
         }
-        if (posicao != contador) {
-            troca = array[contador];
-            array[contador] = array[posicao];
-            array[posicao] = troca;
-        }
+        
+        realizarTroca((int *)&array, contador, menorValorAtual);
     }
-
-    printf("Sorted list in ascending order:\n");
-
-    for (contador = 0; contador < numeroDeElementos; contador++){
-        printf("%d\n", array[contador]);
+    /*
+     * Imprime a lista ordenada
+     */
+    printf("Array ordenado acendente: ");
+    printf("[");
+    for (contador = 0; contador < *pQtdElementos; contador++){
+        printf("%d,", array[contador]);
     }
+    printf("]\n");
 }
